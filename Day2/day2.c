@@ -1,11 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+int temp = 0;
 
 int main(void)
 {
-    int horizontal;
-    int depth;
-    int result;
+    int horizontal = 0;
+    int depth = 0;
+    int result = 0;
 
     FILE *data;
     data = fopen("data.txt", "r");
@@ -25,23 +28,26 @@ int main(void)
         // printf("%d\n", num);
 
         // Take variables and do arithmetic
-        if (strcmp(direction, "forward"))
+        if ((strcmp(direction, "forward")) == 0)
         {
            horizontal += num; 
+           depth += (temp * num);
         }
-        else if (strcmp(direction, "up"))
+        else if ((strcmp(direction, "up")) == 0)
         {
-            depth -= num;
+            // depth -= num; // PART 1
+            temp -= num;
         }
-        else if (strcmp(direction, "down"))
+        else if ((strcmp(direction, "down")) == 0)
         {
-            depth += num;
+            // depth += num; // PART 1
+            temp += num;
         }
     }
 
     result = horizontal * depth;
-    printf("%d\n", num);
-    printf("Part 1: %d", result);
+
+    printf("Answer: %i\n", result);
 
     fclose(data);
     return 0;
