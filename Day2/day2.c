@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int temp = 0;
+int aim = 0;
 
 int main(void)
 {
@@ -31,17 +31,17 @@ int main(void)
         if ((strcmp(direction, "forward")) == 0)
         {
            horizontal += num; 
-           depth += (temp * num);
+           depth += (aim * num);
         }
         else if ((strcmp(direction, "up")) == 0)
         {
             // depth -= num; // PART 1
-            temp -= num;
+            aim -= num;
         }
         else if ((strcmp(direction, "down")) == 0)
         {
             // depth += num; // PART 1
-            temp += num;
+            aim += num;
         }
     }
 
