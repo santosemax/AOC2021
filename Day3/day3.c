@@ -8,7 +8,6 @@
 
 char *lines[TOTAL];
 int total = 0;
-
 typedef struct node {
     char data[12];
     struct node* next;
@@ -47,6 +46,7 @@ void delete_node(node **head, char key, int pos)
 {
     node *temp;
 
+    // if head node == key, move head node to next node
     if ((*head)->data[pos] == key)
     {
         temp = *head;
@@ -77,12 +77,12 @@ void delete_node(node **head, char key, int pos)
 }
 
 // Debug function to print linked list
-void print()
+void print_nodes(node* head)
 {
     node *new_node;
-    for(new_node=headNode; new_node != NULL; new_node=new_node->next)
+    for(new_node=head; new_node != NULL; new_node=new_node->next)
     {
-        printf("%s\n", new_node->data);
+        printf("%s or %lu\n", new_node->data, strtol(new_node->data, NULL, 2));
     }
     //printf("\n");
 }
@@ -131,6 +131,7 @@ int main()
         {
             //headNode = add_head(headNode, line);
             add_last(&headNode, line);
+            add_last(&headNode2, line);
             //printf("%s", headNode->data);
             //tempNode = headNode;
         }
@@ -138,6 +139,7 @@ int main()
         {
             //tempNode = add_to_list(tempNode, line);
             add_last(&headNode, line);
+            add_last(&headNode2, line);
             //printf("%s", tempNode->data);
         }
 
@@ -201,6 +203,7 @@ int main()
     printf("Part 1: %d\n", (epsilon_binary * gamma_binary));
 
     // TODO: PART 2
+    //print_nodes(headNode2);
     part2();
 
     fclose(data);
@@ -211,16 +214,15 @@ int main()
 
 void part2()
 {
-    oxygen_rating();
+    printf("\nPart 2: \n");
 
-    printf("CO2 Srubber Rating: ");
+    oxygen_rating();
+    co2_rating();
 
 }
 
 void oxygen_rating()
 {
-    int tmp = TOTAL;
-    printf("\n");
     // iterate through linked list by character (11 total w/o NULL char)
     for (int i = 0; i < 12; i++)
     {
@@ -277,7 +279,83 @@ void oxygen_rating()
                
     }
     printf("Oxygen Generator Rating: ");
-    print();
+    print_nodes(headNode);
 }
 
+void co2_rating()
+{
+    int tmp = TOTAL;
+    // iterate through linked list by character (11 total w/o NULL char)
+    for (int i = 0; i < 12; i++)
+    {
+        int zeros_counter = 0;
+        int ones_counter = 0;
 
+        // find most common value
+        for (node* current = headNode2; current != NULL; current = current->next)
+        {
+            if (current->data[i] == '0') 
+            {
+                zeros_counter += 1;
+            }
+            else if (current->data[i] == '1')
+            {
+                ones_counter += 1;
+            }
+        }
+
+        // Debug
+        //printf("\n"); printf("Place: %d\n", i);
+        //printf("Ones Counter: %d\n", ones_counter);
+        //printf("Zeros Counter: %d\n", zeros_counter);
+        //if (zeros_counter > ones_counter)
+        //{
+        //    printf("more zeroes\n");
+        //}
+        //else if (zeros_counter < ones_counter)
+        //{
+
+        //    printf("more ones\n");
+        //}
+        //else
+        //    printf("equal\n");
+       
+        //print_nodes(headNode2);
+        
+        // print nodes before deleting (to make sure last node isn't deleted)
+        if (zeros_counter == 1 && ones_counter == 0)
+        {
+            printf("CO2 Rating: ");
+            print_nodes(headNode2);
+        }
+        else if (zeros_counter == 0 && ones_counter == 1)
+        {
+            printf("CO2 Rating: ");
+            print_nodes(headNode2);
+        }
+
+
+        // Remove nodes based on most common value
+        for (node* current = headNode2; current != NULL; current = current->next)
+        {
+            if (zeros_counter > ones_counter)
+            {
+                delete_node(&headNode2, '0', i);
+                tmp -= 1;
+            }
+            else if (zeros_counter == ones_counter)
+            {
+                delete_node(&headNode2, '1', i);
+                tmp -= 1;
+            }
+            else
+            {
+                delete_node(&headNode2, '1', i);
+                tmp -= 1;
+            }
+
+        }
+
+        
+    }
+}
